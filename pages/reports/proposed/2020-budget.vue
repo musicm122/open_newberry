@@ -62,15 +62,20 @@
         ></b-pagination>
       </b-col>
     </b-row>
+    <b-row>
+      <b-button @click="exportToExcel">Excel</b-button>
+    </b-row>
   </b-container>
 </template>
 <script>
+import zipcelx from 'zipcelx'
 import reportData from '~/static/Newberry_Revenue_Proposal_2020.json'
 
 export default {
   data() {
     return {
       dataArray: reportData,
+      visibleRows: reportData,
       totalRows: 1,
       currentPage: 1,
       perPage: 10,
@@ -132,6 +137,15 @@ export default {
     this.totalRows = this.items.length
   },
   methods: {
+    exportToExcel() {
+      const config = {
+        filename: 'Newberry-2020-Proposed-Budget',
+        sheet: {
+          data: this.dataArray,
+        },
+      }
+      zipcelx(config)
+    },
     onFiltered(filterItems) {
       this.totalRows = filterItems.length
       this.currentPage = 1
